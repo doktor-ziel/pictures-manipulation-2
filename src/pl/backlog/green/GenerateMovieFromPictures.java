@@ -3,7 +3,6 @@ package pl.backlog.green;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoWriter;
 
 import java.io.IOException;
