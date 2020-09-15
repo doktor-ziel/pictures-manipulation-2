@@ -5,7 +5,7 @@
     <option name="VM_PARAMETERS" value="-Djava.library.path=lib/x64" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="pl.backlog.green.*" />
+        <option name="PATTERN" value="pl.backlog.green.Watermark" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

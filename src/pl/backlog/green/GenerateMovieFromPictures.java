@@ -12,12 +12,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.opencv.imgcodecs.Imgcodecs.IMREAD_COLOR;
+import static org.opencv.imgcodecs.Imgcodecs.imread;
+import static org.opencv.videoio.VideoWriter.fourcc;
 
 public class GenerateMovieFromPictures {
     public static Size getExpectedSize(String path) throws IOException {
         Path inputDirPath = Paths.get(path);
         String imagePath = Files.list(inputDirPath).findFirst().orElseThrow().toString();
-        Mat image = Imgcodecs.imread(imagePath, IMREAD_COLOR);
+        Mat image = imread(imagePath, IMREAD_COLOR);
         return image.size();
     }
 
@@ -28,13 +30,15 @@ public class GenerateMovieFromPictures {
         String outputPath = "resources/video.avi";
 
         Size expectedSize = getExpectedSize(dirPath);
+        int fps = 4;
+        boolean isColor = true;
 
         VideoWriter videoWriter = new VideoWriter(
                 outputPath,
-                VideoWriter.fourcc('F', 'M', 'P', '4'),
-                4,
+                fourcc('F', 'M', 'P', '4'),
+                fps,
                 expectedSize,
-                true);
+                isColor);
 
         if(!videoWriter.isOpened()){
             videoWriter.release();
@@ -45,8 +49,18 @@ public class GenerateMovieFromPictures {
         Files.list(Paths.get(dirPath))
                 .map(Path::toString)
                 .peek(System.out::println)
-                .map(p -> Imgcodecs.imread(p, IMREAD_COLOR))
+                .map(p -> imread(p, IMREAD_COLOR))
                 .forEach(videoWriter::write);
+
+        // Or without Stream API:
+//        List<Path> filesList = Files.list(Paths.get(dirPath)).collect(Collectors.toList());
+//        for (Path filePath : filesList) {
+//            String filePathString = filePath.toString();
+//            System.out.println(filePathString);
+//            Mat image = Imgcodecs.imread(filePathString, IMREAD_COLOR);
+//            videoWriter.write(image);
+//        }
+
         videoWriter.release();
     }
 }
